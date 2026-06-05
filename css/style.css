@@ -65,7 +65,7 @@ h2{font-size:clamp(1.9rem,4.5vw,2.9rem);margin:0 0 1rem}
 
 /* ====================== NAV ====================== */
 header{position:sticky;top:0;z-index:100}
-nav{
+nav{position:relative;
   background:rgba(11,14,17,.7);backdrop-filter:blur(14px);
   -webkit-backdrop-filter:blur(14px);
   border-bottom:1px solid transparent;transition:border-color .3s ease, box-shadow .3s ease, background .3s ease;
@@ -112,7 +112,7 @@ nav.scrolled{border-bottom-color:var(--color-border);box-shadow:0 8px 30px rgba(
   background:radial-gradient(circle, rgba(52,211,230,.18), transparent 65%);
   filter:blur(20px);pointer-events:none;
 }
-.hero-inner{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;padding:7rem 1.5rem 4rem;width:100%}
+.hero-inner{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;padding:clamp(4.5rem,12vw,7rem) 1.5rem clamp(3rem,7vw,4rem);width:100%}
 .hero h1{font-size:clamp(2.8rem,8vw,5.4rem);margin:.4rem 0 1.3rem;letter-spacing:-.03em}
 .hero-sub{font-size:clamp(1.05rem,2vw,1.25rem);color:var(--color-text-muted);max-width:52ch;margin-bottom:2rem}
 .hero-actions{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:2.4rem}
@@ -127,7 +127,7 @@ nav.scrolled{border-bottom-color:var(--color-border);box-shadow:0 8px 30px rgba(
 .section-head{margin-bottom:3rem;max-width:760px}
 
 /* ---------- Services cards ---------- */
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.4rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(290px,100%),1fr));gap:1.4rem}
 .card{
   background:var(--color-surface);border:1px solid var(--color-border);
   border-radius:var(--radius);padding:1.8rem;position:relative;
@@ -172,7 +172,7 @@ nav.scrolled{border-bottom-color:var(--color-border);box-shadow:0 8px 30px rgba(
 }
 .ba-slider img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .ba-before-wrap{position:absolute;inset:0;width:50%;overflow:hidden;border-right:2px solid var(--color-accent)}
-.ba-before-wrap img{width:100vw;max-width:1000px}
+.ba-before-wrap img{width:100%;max-width:none;height:100%;object-fit:cover;position:absolute;inset:0}
 .ba-range{
   position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize;z-index:5;
 }
@@ -186,7 +186,7 @@ nav.scrolled{border-bottom-color:var(--color-border);box-shadow:0 8px 30px rgba(
 }
 .ba-handle span::before{content:"‹ ›";font-family:var(--font-display);font-weight:700;letter-spacing:-2px}
 
-.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(160px,100%),1fr));gap:1rem}
 .gallery-grid img{border-radius:var(--radius-sm);aspect-ratio:1;object-fit:cover;border:1px solid var(--color-border);transition:transform .3s ease, filter .3s ease;filter:grayscale(.15)}
 .gallery-grid img:hover{transform:scale(1.03);filter:none}
 
@@ -268,27 +268,103 @@ nav.scrolled{border-bottom-color:var(--color-border);box-shadow:0 8px 30px rgba(
 }
 
 /* ====================== RESPONSIVE ====================== */
-@media (max-width:880px){
-  .area-grid,.about-grid,.contact-grid{grid-template-columns:1fr;gap:2.2rem}
-  .about-photo{order:2}
-  .footer-grid{grid-template-columns:1fr 1fr}
+
+/* --- Tablet landscape (≤1024px) --- */
+@media (max-width:1024px){
+  .footer-grid{grid-template-columns:1.4fr 1fr 1fr 1fr;gap:1.5rem}
 }
+
+/* --- Tablet portrait (≤880px) --- */
+@media (max-width:880px){
+  .area-grid,
+  .about-grid,
+  .contact-grid{grid-template-columns:1fr;gap:2rem}
+
+  /* Map fills full width stacked below text */
+  .area-map{max-width:100%;aspect-ratio:16/9}
+
+  /* About: photo below text on tablet */
+  .about-photo{order:2}
+
+  /* Footer: 2 column grid */
+  .footer-grid{grid-template-columns:1fr 1fr;gap:2rem}
+
+  /* Reviews: allow single-column if narrow */
+  .reviews{grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))}
+}
+
+/* --- Mobile nav + layout (≤760px) --- */
 @media (max-width:760px){
+  /* Hamburger */
   .nav-toggle{display:flex}
   .nav-links{
-    position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;
-    gap:.2rem;background:rgba(11,14,17,.98);backdrop-filter:blur(14px);
-    border-bottom:1px solid var(--color-border);padding:1rem 1.5rem 1.5rem;
-    transform:translateY(-12px);opacity:0;pointer-events:none;transition:opacity .25s ease, transform .25s ease;
+    position:absolute;top:100%;left:0;right:0;
+    flex-direction:column;align-items:stretch;gap:.2rem;
+    background:rgba(11,14,17,.98);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--color-border);
+    padding:1rem 1.5rem 1.5rem;
+    transform:translateY(-12px);opacity:0;pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
   }
   .nav-links.open{transform:none;opacity:1;pointer-events:auto}
-  .nav-links a{padding:.85rem .5rem;border-radius:8px}
+  .nav-links a{padding:.85rem .5rem;border-radius:8px;color:var(--color-text)}
   .nav-links .nav-cta{margin:.4rem 0 0;text-align:center}
-  .mobile-cta-float{display:inline-flex}
+
+  /* Hero: stack buttons full width */
+  .hero-actions{flex-direction:column}
+  .hero-actions .btn{width:100%;text-align:center}
+
+  /* Hero trust bar: stack */
+  .hero-trust{flex-direction:column;align-items:flex-start;gap:.8rem}
+  .hero-trust .dot{display:none}
+
+  /* Before/after: taller on portrait phones for usability */
+  .ba-slider{aspect-ratio:4/3}
+
+  /* Gallery: 2 columns on mobile */
+  .gallery-grid{grid-template-columns:repeat(2,1fr)}
+
+  /* Form field row: single column */
   .field-row{grid-template-columns:1fr}
-  .hero-actions .btn{flex:1}
+
+  /* Booking form: remove extra padding */
+  .booking-form{padding:1.4rem}
+
+  /* Push contact form below info block */
+  .contact-grid{gap:1.6rem}
+
+  /* Footer: 2 columns */
+  .footer-grid{grid-template-columns:1fr 1fr}
+
+  /* Floating call button */
+  .mobile-cta-float{display:inline-flex}
+
+  /* Bump section padding down on mobile */
+  .section{padding:clamp(3rem,8vw,5rem) 0}
+  .section-head{margin-bottom:2rem}
 }
-@media (max-width:460px){
+
+/* --- Small phones (≤480px) --- */
+@media (max-width:480px){
+  /* Single column footer */
   .footer-grid{grid-template-columns:1fr}
+  .footer-tag{max-width:none}
+
+  /* Area list: single column */
   .area-list{grid-template-columns:1fr}
+
+  /* Gallery: still 2 columns, slightly tighter */
+  .gallery-grid{gap:.6rem}
+
+  /* Hero: loosen bottom so floating CTA doesn't overlap */
+  .hero-inner{padding-bottom:5rem}
+
+  /* Tighten card padding */
+  .card{padding:1.4rem}
+
+  /* Booking section bottom padding for floating CTA clearance */
+  #contact{padding-bottom:5rem}
+
+  /* Features: single column on very small phones */
+  .features{grid-template-columns:1fr}
 }
