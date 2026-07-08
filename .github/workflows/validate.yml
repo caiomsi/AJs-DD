@@ -25,6 +25,6 @@ jobs:
             --exclude-path images
             --exclude "ajsdiamonddetailing\.com"
             --exclude "caiomsi\.github\.io"
-            --exclude "facebook\.com|instagram\.com|google\.com"
+            --exclude "facebook\.com|instagram\.com|google\.com|yelp\.com"
             index.html
           fail: true
